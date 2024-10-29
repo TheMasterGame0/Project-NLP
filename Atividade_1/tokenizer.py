@@ -26,28 +26,36 @@ def update(ids, pair, newID):
       i += 1
   return newIds
 
-def makeVocab(vocabSize, ids, newIdStart, internalPrints = False):
+def makeVocab(vocabSize, ids, newIdStart = 0, merges = {}, internalPrints = False):
   """
     Tokenize the given array to match vocabSize.
   """ 
   numberUpdates = vocabSize - 256
-  # Register tokens creation. newId : (oldId, oldId).
-  merges = {}
-  for i in range(numberUpdates):
-    stats = countPairs(ids)
-    # Returns the top pair (the one with more repeats)
-    topPair = max(stats, key=stats.get)
-    newId = 256 + i + newIdStart
-    # New list of tokens
-    ids = update(ids, topPair, newId)
-    # Register
-    if (internalPrints == True):
-      print("Updated pair ("+str(topPair[0])+", "+str(topPair[1])+") to id " + str(newId))
 
-    merges[topPair] = newId
-  
-  return merges, ids
+  # merges: Register tokens creation. newId : (oldId, oldId).    
 
+  try:
+    for i in range(numberUpdates):
+      stats = countPairs(ids)
+      # Returns the top pair (the one with more repeats)
+      topPair = max(stats, key=stats.get)
+      
+      #Verify the existence of repeats in merges
+      if topPair not in merges:
+        newId = 256 + i + newIdStart
+        merges[topPair] = newId
+      else: 
+        newId = merges[topPair]
+        
+      # New list of tokens
+      ids = update(ids, topPair, newId)
+      # Register
+      if (internalPrints == True):
+        print("Updated pair ("+str(topPair[0])+", "+str(topPair[1])+") to id " + str(newId))
+    
+    return merges, ids
+  except: 
+    return  merges, ids
 # Decoding and encoding text
 def decoder(ids, vocab):
   """
@@ -61,7 +69,7 @@ def encoder(text, merges):
   # Take the text and convert to raw bytes tokens
   tokens = list(map(int, text.encode("utf-8")))
   while len(tokens) >=2:
-    stats = countPairs(ids)
+    stats = countPairs(tokens)
     # Takes the pair with smallest id from merge dictionary
     pair = min(stats, key= lambda p: merges.get(p, float("inf")))
     if pair not in merges:
