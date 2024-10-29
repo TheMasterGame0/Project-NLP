@@ -26,7 +26,7 @@ def update(ids, pair, newID):
       i += 1
   return newIds
 
-def makeVocab(vocabSize, ids, internalPrints = False):
+def makeVocab(vocabSize, ids, newIdStart, internalPrints = False):
   """
     Tokenize the given array to match vocabSize.
   """ 
@@ -37,7 +37,7 @@ def makeVocab(vocabSize, ids, internalPrints = False):
     stats = countPairs(ids)
     # Returns the top pair (the one with more repeats)
     topPair = max(stats, key=stats.get)
-    newId = 256 + i
+    newId = 256 + i + newIdStart
     # New list of tokens
     ids = update(ids, topPair, newId)
     # Register
@@ -72,22 +72,26 @@ def encoder(text, merges):
 
   return tokens
 
-# Making Vocab
-tokens = list(map(int, text.encode("utf-8")))
-merges, ids = makeVocab(276, tokens)
-# Creating dictionary with all vocab
-vocab = {idx: bytes([idx]) for idx in range(256)}
-# This part only works because we have sure that merges indexes are in increasing order
-for (p0, p1), idx in merges.items():
-  vocab[idx] = vocab[p0] + vocab[p1]
 
-# print(decoder(encoder(text, merges), vocab))
+# #########################################
+# # Example of making a Vocab
 
-# Make a list going from the pair with most repeats to the least.
-# print(sorted(((value, pair) for pair,value in stats.items()), reverse=True))
+# # Making Vocab
+# tokens = list(map(int, text.encode("utf-8")))
+# merges, ids = makeVocab(276, tokens)
+# # Creating dictionary with all vocab
+# vocab = {idx: bytes([idx]) for idx in range(256)}
+# # This part only works because we have sure that merges indexes are in increasing order
+# for (p0, p1), idx in merges.items():
+#   vocab[idx] = vocab[p0] + vocab[p1]
 
-# Results
-print("Text length: ", len(text))
-print("Initial tokens length: ", len(tokens))
-print("Final tokens length: ", len(ids))
-print(f"Compression rate: {len(tokens)/len(ids):.2f}X")
+# # print(decoder(encoder(text, merges), vocab))
+
+# # Make a list going from the pair with most repeats to the least.
+# # print(sorted(((value, pair) for pair,value in stats.items()), reverse=True))
+
+# # Results
+# print("Text length: ", len(text))
+# print("Initial tokens length: ", len(tokens))
+# print("Final tokens length: ", len(ids))
+# print(f"Compression rate: {len(tokens)/len(ids):.2f}X")
