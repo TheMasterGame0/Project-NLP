@@ -2,9 +2,6 @@ import tokenizer as t
 import os, json
 import re
 
-# Take te string to be tokenized
-text = "Some random string to be used as an example to be tokenized. To have the best use of the tokenizer and have a good result, it is important to have some long enough text to find some pattern to be followed. This example is not good but it is some start to understand the proposal and the ideas behind the code being done.\nExpanding the text!\nOn the first try, this text was long, but the number of tokens was exactly equal to the number of Unicode bytes, for this reason was increased a little bit the size of the text (probably will not change the equality of the sizes but will provide a better result in the end)."
-
 # Functions to create the Bigram tuples ( Very similar to the Vocabulary for tokenizer).
 def bigramPairs(ids):
   dic = {}
