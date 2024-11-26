@@ -1,7 +1,5 @@
 import pandas as p
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import MultinomialNB
 from sklearn.preprocessing import LabelEncoder # Possibilita a transformação de classes Alpha-numéricas em classes numéricas.
 import re
 import math
@@ -129,14 +127,9 @@ def Naive_Bayes_Classifier(frase):
         results[i] += nbc.query(f'Word == "{word}"').iat[0, i+1]
   return classes[results.index(max(results))]
 
-# f = open("Atividade_3/test.csv", "r")
-# temp = p.read_csv(f)
-# testX, testY = temp.iloc[:, :-2], temp.iloc[:, -1]
-# f.close()
-
-# data = p.read_csv("Atividade_3/Dmoz-Health.csv")
+# data = p.read_csv("Atividade_3/Dmoz-Computers.csv")
 # prepareParameters(data)
 
-test_frase = "TCTMD A source of clinical and technical information and physician education in interventional cardiology and interventional vascular medicine." # Medicine
+# test_frase = "TCTMD A source of clinical and technical information and physician education in interventional cardiology and interventional vascular medicine." # Medicine
 
-print(Naive_Bayes_Classifier(test_frase))
+# print(Naive_Bayes_Classifier(test_frase))
