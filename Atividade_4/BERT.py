@@ -76,7 +76,7 @@ def makeTensor(arquivo, tokenizer):
   # wrap tensors
   train = TensorDataset(sequence, mask, y)
   # dataloader
-  dataloader = DataLoader(train, sampler=RandomSampler(train), batch_size=16) 
+  dataloader = DataLoader(train, sampler=RandomSampler(train), batch_size=32) 
 
   return dataloader
 
@@ -130,7 +130,7 @@ def evaluate(model, device, dataloader_val):
     return loss_val_avg, predictions, true_vals
 
 
-device = torch.device('cpu')
+device = torch.device('cuda')
 data = p.read_csv("Dmoz-Computers.csv")
 labels = create_Train_Test(data)
 
@@ -152,7 +152,7 @@ optimizer = AdamW(model.parameters(),
                   lr=1e-5, 
                   eps=1e-8)
                   
-epochs = 1
+epochs = 10
 
 scheduler = get_linear_schedule_with_warmup(optimizer,num_warmup_steps=0,
                                             num_training_steps=len(dataloader_train)*epochs)
